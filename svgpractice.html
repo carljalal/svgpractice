@@ -1,0 +1,74 @@
+<html>
+<body>
+<script>
+display = document.createElement("div");
+document.body.append(display);
+
+
+let exampleSvgString = `
+<svg width ="100" height="100">
+<circle cx="50" cy="50" r="20" stroke="green" stroke-width="4" fill="yellow" />
+</svg>
+    `;
+
+
+let randColor = () => {
+    let a = Math.floor(Math.random()*27);
+    let b = Math.floor(Math.random()*27);
+    let c = Math.floor(Math.random()*27);
+    a *= 10;
+    b *= 10;
+    c *= 10;
+    a = Math.min(255,a);
+    b = Math.min(255,b);
+    c = Math.min(255,c);
+    return `rgb(${a},${b},${c})`
+}
+
+let randSize = (r) => {
+    return 6+Math.floor(Math.random()*r/6)*6;
+}
+
+
+let generateSVGCircle = (x,y,r) => {
+    let cx = x;
+    let cy = y;
+    let cr = r;
+    let strokeColor = randColor();
+    let fillColor = randColor();
+    let tSvgString = `<circle cx="` + cx;
+    tSvgString += `" cy="` + cy;
+    tSvgString += `" r="` + cr;
+    tSvgString += `" stroke="` + strokeColor;
+    tSvgString += `" stroke-width="8"`;
+    tSvgString += ` fill="` + fillColor;
+    tSvgString += `" />`;
+    return tSvgString;
+}
+
+
+let twoSVGCircles = () => {
+    let s = "";
+    s += generateSVGCircle(33,50,randSize(25));
+    s += generateSVGCircle(66,50,randSize(25));
+    return wrapInSVG(s);
+}
+
+
+
+
+
+let wrapInSVG = (tSvgString) => {
+    return `<svg width="100" height="100">` + tSvgString + `</svg>`;
+}
+
+
+let string = twoSVGCircles();
+display.innerHTML = string;
+
+
+
+
+</script>
+</body>
+</html>
