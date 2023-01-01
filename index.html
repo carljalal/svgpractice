@@ -3,7 +3,7 @@
 <script>
 display = document.createElement("div");
 document.body.append(display);
-
+document.body.style.backgroundColor = "black"
 
 let exampleSvgString = `
 <svg width ="100" height="100">
@@ -26,7 +26,7 @@ let randColor = () => {
 }
 
 let randSize = (r) => {
-    return 6+Math.floor(Math.random()*r/6)*6;
+    return 10+Math.floor(Math.random()*r/10)*10;
 }
 
 
@@ -40,7 +40,7 @@ let generateSVGCircle = (x,y,r) => {
     tSvgString += `" cy="` + cy;
     tSvgString += `" r="` + cr;
     tSvgString += `" stroke="` + strokeColor;
-    tSvgString += `" stroke-width="8"`;
+    tSvgString += `" stroke-width="10"`;
     tSvgString += ` fill="` + fillColor;
     tSvgString += `" />`;
     return tSvgString;
@@ -49,8 +49,9 @@ let generateSVGCircle = (x,y,r) => {
 
 let twoSVGCircles = () => {
     let s = "";
-    s += generateSVGCircle(33,50,randSize(25));
-    s += generateSVGCircle(66,50,randSize(25));
+    s += `<rect`;
+    s += generateSVGCircle(50,40,randSize(30));
+    s += generateSVGCircle(100,40,randSize(30));
     return wrapInSVG(s);
 }
 
@@ -59,7 +60,7 @@ let twoSVGCircles = () => {
 
 
 let wrapInSVG = (tSvgString) => {
-    return `<svg width="100" height="100">` + tSvgString + `</svg>`;
+    return `<svg width="150" height="80" style="background: ${randColor()}" border:3px solid ${randColor()}>` + tSvgString + `</svg>`;
 }
 
 
