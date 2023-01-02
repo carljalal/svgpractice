@@ -12,59 +12,83 @@ let exampleSvgString = `
     `;
 
 
-let randColor = () => {
-    let a = Math.floor(Math.random()*27);
-    let b = Math.floor(Math.random()*27);
-    let c = Math.floor(Math.random()*27);
-    a *= 10;
-    b *= 10;
-    c *= 10;
-    a = Math.min(255,a);
-    b = Math.min(255,b);
-    c = Math.min(255,c);
-    return `rgb(${a},${b},${c})`
+let RGBToString = (r,g,b) => {
+    return `rgb(${r},${g},${b})`
 }
+
+let RGBObjectToString = (o) => {
+    return RGBToString(o.r,o.g,o.b);
+}
+
+
+let randColorObject = () => {
+    let r = Math.floor(Math.random()*27);
+    let g = Math.floor(Math.random()*27);
+    let b = Math.floor(Math.random()*27);
+    r *= 10;
+    g *= 10;
+    b *= 10;
+    r = Math.min(255,r);
+    g = Math.min(255,g);
+    b = Math.min(255,b);
+    return {r:r,g:g,b:b,string:RGBToString(r,g,b)};
+}
+
+let randColorString = () => {
+    o = randColorObject();
+    return RGBObjectToString(o);
+}
+
 
 let randSize = (r) => {
     return 10+Math.floor(Math.random()*r/10)*10;
 }
 
 
-let generateSVGCircle = (x,y,r) => {
-    let cx = x;
-    let cy = y;
-    let cr = r;
-    let strokeColor = randColor();
-    let fillColor = randColor();
-    let tSvgString = `<circle cx="` + cx;
-    tSvgString += `" cy="` + cy;
-    tSvgString += `" r="` + cr;
-    tSvgString += `" stroke="` + strokeColor;
-    tSvgString += `" stroke-width="10"`;
-    tSvgString += ` fill="` + fillColor;
-    tSvgString += `" />`;
-    return tSvgString;
+let stringSVGCircle = (o) => {
+    let svgString = `<circle cx="` + o.x;
+    svgString += `" cy="` + o.y;
+    svgString += `" r="` + o.size;
+    svgString += `" stroke="` + RGBObjectToString(o.strokeColorObject);
+    svgString += `" stroke-width="20"`;
+    svgString += ` fill="` + RGBObjectToString(o.fillColorObject);
+    svgString += `" />`;
+    return svgString;
+}
+
+let stringSVGRect = (o) => {
+    return `<rect width="${o.xSVG}" height="${o.ySVG}" style="fill:${RGBObjectToString(o.fillColorObject)};stroke:${RGBObjectToString(o.strokeColorObject)};stroke-width:${20}"/>`;
 }
 
 
-let twoSVGCircles = () => {
+let SVGElementGroup = (o) => {
     let s = "";
-    s += `<rect`;
-    s += generateSVGCircle(50,40,randSize(30));
-    s += generateSVGCircle(100,40,randSize(30));
-    return wrapInSVG(s);
+    s += stringSVGRect(o.square);
+    s += stringSVGCircle(o.circle1);
+    s += stringSVGCircle(o.circle2);
+    return wrapInSVG(s,o.xSVG,o.ySVG);
 }
 
 
+let wrapInSVG = (svgString,xSVG,ySVG) => {
+    return `<svg width="${xSVG}" height="${ySVG}">` + svgString + `</svg>`;
+}
 
+let circleSVGConfig = (xSVG,ySVG,x,y)  => {
+    return {type:"circle",fillColorObject:randColorObject(), strokeColorObject:randColorObject(), size: randSize(ySVG/3),x:x,y:y,xSVG:xSVG,ySVG:ySVG};
+}
 
-
-let wrapInSVG = (tSvgString) => {
-    return `<svg width="150" height="80" style="background: ${randColor()}" border:3px solid ${randColor()}>` + tSvgString + `</svg>`;
+let randSVGConfig = () => {
+    let xSVG = 150;
+    let ySVG = 80;
+    let x = xSVG/3;
+    let y = ySVG/2;
+    return {circle1:circleSVGConfig(xSVG,ySVG,x,y), circle2:circleSVGConfig(xSVG,ySVG,x*2,y), square:circleSVGConfig(xSVG,ySVG,x*1.5,y), xSVG:xSVG, ySVG:ySVG};
 }
 
 
-let string = twoSVGCircles();
+let svgConfig = randSVGConfig();
+let string = SVGElementGroup(svgConfig);
 display.innerHTML = string;
 
 
