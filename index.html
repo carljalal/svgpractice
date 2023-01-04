@@ -61,7 +61,7 @@ let stringSVGRect = (o) => {
 }
 
 
-let SVGElementGroup = (o) => {
+let SVGHTMLGroup = (o) => {
     let s = "";
     s += stringSVGRect(o.square);
     s += stringSVGCircle(o.circle1);
@@ -88,7 +88,7 @@ let randSVGConfig = () => {
 
 
 let svgConfig = randSVGConfig();
-let string = SVGElementGroup(svgConfig);
+let string = SVGHTMLGroup(svgConfig);
 display.innerHTML = string;
 
 
